@@ -1,5 +1,6 @@
 /* TO-DO list:
 - re-order operators for clarity
+- align operators with numbers
 */
 
 body {
@@ -96,6 +97,7 @@ button:active {
 
 #equalBtn {
     background-color:#ff00e6;
+    width: 57%;
 }
 
 #AC {
