@@ -1,0 +1,20 @@
+body {
+    font-size: 3rem;
+    font-family: 'Silkscreen';
+}
+
+.display {
+    border-bottom: 1px solid black;
+    color: #52dc60;
+    background-color: rgb(222, 228, 223);
+}
+
+.calculator {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid;
+}
+
+button {
+    font-family: 'Silkscreen';
+}
