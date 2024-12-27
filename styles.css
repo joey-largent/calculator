@@ -30,7 +30,7 @@ h1 {
     padding: 0.5rem;
     padding-right: 3rem;
     background-color: #9491ec;
-    border-radius: 10px 10px 0 0;
+    border-radius: 20px 20px 0 0;
     font-size: 4rem;
 }
 
@@ -45,16 +45,16 @@ h1 {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    border: none;
+    border: 10px outset #6461a7;;
     box-shadow: 10px 10px 10px #77250c;
-    border-radius: 10px;
+    border-radius: 30px;
     max-width: 20rem;
     min-width: 15rem;
 }
 
 .buttons {
     background-color: #e3c6dc;
-    border-radius: 0 0 10px 10px;
+    border-radius: 0 0 20px 20px;
     display: flex;
     justify-content: center;
     align-items: center;
