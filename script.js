@@ -1,19 +1,12 @@
 //link to keystrokes as well as clicks
-//limit numbers to 5 digits total
-//display disappears when equal sign is clicked
-//after operator is clicked, the new number should replace the previous number
-//zero should never come before a number
-//decimal button does not work
-//decimals cannot come twice
-//decimal numbers and results can only have 1 decimal place
-//calculator should only work with two numbers at a time, after this it should take the result as a new "a" and accept a new operator
+//calculator should make an expression using two numbers at a time only. After this, it should take the most recent result and the next number to make the next expression.
 
 let currentNumber = "";
 let operator = "";
 let previousResult = null;
 let hasDecimal = false;
 
-const display = function() {
+const display = function(content) {
     const displayElement = document.querySelector(".displayNum");
     displayElement.innerHTML = content || "0";
 };
@@ -43,56 +36,56 @@ const operate = function(a, b, operator) {
     return parseFloat(result.toFixed(1));
 };
 
-document.querySelectorAll(".buttons button").forEach(button => 
-    {button.addEventListener("click", () => {
-    const value = button.textContent;
+document.querySelectorAll(".buttons button").forEach(button => {
+    button.addEventListener("click", () => {
+        const value = button.textContent;
 
-    if (!isNaN(value)) {
-        if (currentNumber.length < 5) {
-            if (value === "0" && currentNumber === "") {
-                return;
+        if (!isNaN(value)) {
+            if (currentNumber.length < 5) {
+                if (value === "0" && currentNumber === "") {
+                    return;
+                }
+                currentNumber += value;
+                display(currentNumber);
             }
-            currentNumber += value;
-            display(currentNumber);
-        }
-    } else if (value === ".") {
-        if (!hasDecimal) {
-            currentNumber += currentNumber === "" ? "0." : ".";
-            hasDecimal = true;
-            display(currentNumber);
-        }
-    } else if (value === "c") {
-        previousResult = null;
-        currentNumber = "";
-        operator = "";
-        hasDecimal = false;
-        display();
-    } else if (value === "=") {
-        if (previousResult !== null && operator && currentNumber) {
-            previousResult = calculate(previousResult, currentNumber, operator);
-            display(previousResult);
+        } else if (value === ".") {
+            if (!hasDecimal) {
+                currentNumber += currentNumber === "" ? "0." : ".";
+                hasDecimal = true;
+                display(currentNumber);
+            }
+        } else if (value === "c") {
+            previousResult = null;
             currentNumber = "";
             operator = "";
-            hasDecimal = previousResult.toString().includes(".");
-        }
-    } else if (value === "del") {
-        if (currentNumber) {
-            if (currentNumber.slice(-1) === ".") hasDecimal = false;
-            currentNumber = currentNumber.slice(0, -1);
-            display(currentNumber || "0");
-        }
-    }   else {
-        if (currentNumber) {
-            if (previousResult === null) {
-                previousResult = currentNumber;
-            } else if (operator){
-                previousResult = calculate(previousResult, currentNumber, operator);
-                display(previousResult);
-            }
-            operator = value;
-            currentNumber = "";
             hasDecimal = false;
+            display();
+        } else if (value === "=") {
+            if (previousResult !== null && operator && currentNumber) {
+                previousResult = operate(previousResult, currentNumber, operator);
+                display(previousResult);
+                currentNumber = "";
+                operator = "";
+                hasDecimal = previousResult.toString().includes(".");
+            }
+        } else if (value === "del") {
+            if (currentNumber) {
+                if (currentNumber.slice(-1) === ".") hasDecimal = false;
+                currentNumber = currentNumber.slice(0, -1);
+                display(currentNumber || "0");
+            }
+        }   else {
+            if (currentNumber) {
+                if (previousResult === null) {
+                    previousResult = currentNumber;
+                } else if (operator){
+                    previousResult = operate(previousResult, currentNumber, operator);
+                    display(previousResult);
+                }
+                operator = value;
+                currentNumber = "";
+                hasDecimal = false;
+            }
         }
-    }
     });
 });
