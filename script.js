@@ -1,5 +1,4 @@
 //link to keystrokes as well as clicks
-//calculator should make an expression using two numbers at a time only. After this, it should take the most recent result and the next number to make the next expression.
 
 let currentNumber = "";
 let operator = "";
@@ -42,9 +41,7 @@ document.querySelectorAll(".buttons button").forEach(button => {
 
         if (!isNaN(value)) {
             if (currentNumber.length < 5) {
-                if (value === "0" && currentNumber === "") {
-                    return;
-                }
+                if (value === "0" && currentNumber === "") return;
                 currentNumber += value;
                 display(currentNumber);
             }
@@ -61,8 +58,8 @@ document.querySelectorAll(".buttons button").forEach(button => {
             hasDecimal = false;
             display();
         } else if (value === "=") {
-            if (previousResult !== null && operator && currentNumber) {
-                previousResult = operate(previousResult, currentNumber, operator);
+            if (previousResult !== null && operator) {
+                previousResult = operate(previousResult, currentNumber || previousResult, operator);
                 display(previousResult);
                 currentNumber = "";
                 operator = "";
@@ -75,12 +72,12 @@ document.querySelectorAll(".buttons button").forEach(button => {
                 display(currentNumber || "0");
             }
         }   else {
-            if (currentNumber) {
-                if (previousResult === null) {
-                    previousResult = currentNumber;
-                } else if (operator){
-                    previousResult = operate(previousResult, currentNumber, operator);
+            if (currentNumber || previousResult !== null) {
+                if (operator && currentNumber) {
+                    previousResult = operate(previousResult || currentNumber, currentNumber, operator);
                     display(previousResult);
+                } else if (!operator && currentNumber) {
+                    previousResult = currentNumber;
                 }
                 operator = value;
                 currentNumber = "";
