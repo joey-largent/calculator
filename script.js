@@ -1,58 +1,65 @@
 //link to keystrokes as well as clicks
-//add delete button
-    //arr.pop()
 
 let numbers = [];
 let operator = "";
 
 const operate = function() {
-    if (operator === "add") {
+    if (operator === "+") {
         return add(numbers);
-    } else if (operator === "subtract") {
+    } else if (operator === "-") {
         return subtract(numbers);
-    } else if (operator === "multiply") {
+    } else if (operator === "x") {
         return multiply(numbers);
-    } else if (operator === "divide") {
+    } else if (operator === "÷") {
         return divide(numbers);
     }
 };
 
 const display = function() {
-    document.getElementById(".displayNum").innerHTML = numbers.join("");
-}
+    const displayElement = document.querySelector(".displayNum");
+    displayElement.innerHTML = numbers.length > 0 ? numbers.join("") : "0";
+};
 
 const add = function(numbers) {
-    let sum = 0;
-    for (let i = 0; i < numbers.length; i++) {
-        sum += numbers[i];
-    }
-    return sum;
+    return numbers.reduce((sum, num) => sum + num, 0);
 };
 
 const subtract = function(numbers) {
-    let sum = 0;
-    for (let i = 0; i < numbers.length; i++) {
-        sum -= numbers[i];
-    }
-    return sum;
+    return numbers.reduce((total, num) => total - num);
 };
 
 const multiply = function(numbers) {
-    let product = 1;
-    for (let i = 0; i < numbers.length; i++) {
-        product *= numbers[i];
-    }
-    return product;
+    return numbers.reduce((product, num) => product * num, 1);
 };
 
 const divide = function(numbers) {
-    if (numbers.length === 0) return 0;
-    let quotient = numbers[0];
-    for (let i = 1; i < numbers.length; i++) {
-        if (numbers[i] === 0) {
-            return "ERROR";
-        }
-        quotient /= numbers[i];
-    }
+    return numbers.reduce((quotient, num) => {
+    if (num === 0) return "ERROR";
     return quotient;
+    });
 };
+
+document.querySelectorAll(".buttons button").forEach(button => 
+    {button.addEventListener("click", () => {
+    const value = button.textContent;
+
+    if (!isNaN(value)) {
+        numbers.push(Number(value));
+        display();
+    } else if (value === "c") {
+        numbers = [];
+        operator = "";
+        display();
+    } else if (value === "=") {
+        const result = operate();
+        numbers = [result];
+        display();
+    } else if (value === "del") {
+        numbers.pop();
+        display();
+    }   else {
+        operator = value;
+        display();
+    }
+    });
+});
