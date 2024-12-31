@@ -46,8 +46,12 @@ const multiply = function(numbers) {
 };
 
 const divide = function(numbers) {
-let quotient = 1;
-    for (let i = 0; i < numbers.length; i++) {
+    if (numbers.length === 0) return 0;
+    let quotient = numbers[0];
+    for (let i = 1; i < numbers.length; i++) {
+        if (numbers[i] === 0) {
+            return "ERROR";
+        }
         quotient /= numbers[i];
     }
     return quotient;
