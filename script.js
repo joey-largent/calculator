@@ -1,5 +1,3 @@
-//link to keystrokes as well as clicks
-
 let currentNumber = "";
 let operator = "";
 let previousResult = null;
@@ -22,14 +20,16 @@ const operate = function(a, b, operator) {
         case "-":
             result = num1 - num2;
             break;
+        case "*":
         case "x":
             result = num1 * num2;
             break;
         case "÷":
+        case "/":
             result = num2 === 0 ? "ERROR" : num1 / num2;
             break;
         default:
-            return b;
+            return a;
     }
 
     return parseFloat(result.toFixed(1));
@@ -90,11 +90,19 @@ document.querySelectorAll(".buttons button").forEach(button => {
 
 document.addEventListener("keydown", (event) => {
     const key = event.key;
-    const validKeys = "0123456789.+-*/EnterBackspace".split("");
-    if (validKeys.includes(key)) {
-        event.preventDefault();
+
+    if (!isNaN(key)) {
         handleInput(key);
-    } else if (key === "c" || key === "C") {
+    } else if (key === ".") {
+        handleInput(".");
+    } else if (key === "Enter") {
+        event.preventDefault();
+        handleInput("=");
+    } else if (key === "Backspace") {
+        handleInput("del");
+    } else if ([ "+", "-", "*", "/", "x", "÷"].includes(key)) {
+        handleInput(key === "x" ? "*" : key === "÷" ? "/" : key);
+    } else if (key.toLowerCase() === "c") {
         handleInput("c");
     }
 });
