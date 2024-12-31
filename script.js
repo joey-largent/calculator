@@ -1,42 +1,46 @@
 //link to keystrokes as well as clicks
+//limit numbers to 5 digits total
+//display disappears when equal sign is clicked
+//after operator is clicked, the new number should replace the previous number
+//zero should never come before a number
+//decimal button does not work
+//decimals cannot come twice
+//decimal numbers and results can only have 1 decimal place
+//calculator should only work with two numbers at a time, after this it should take the result as a new "a" and accept a new operator
 
-let numbers = [];
+let currentNumber = "";
 let operator = "";
-
-const operate = function() {
-    if (operator === "+") {
-        return add(numbers);
-    } else if (operator === "-") {
-        return subtract(numbers);
-    } else if (operator === "x") {
-        return multiply(numbers);
-    } else if (operator === "÷") {
-        return divide(numbers);
-    }
-};
+let previousResult = null;
+let hasDecimal = false;
 
 const display = function() {
     const displayElement = document.querySelector(".displayNum");
-    displayElement.innerHTML = numbers.length > 0 ? numbers.join("") : "0";
+    displayElement.innerHTML = content || "0";
 };
 
-const add = function(numbers) {
-    return numbers.reduce((sum, num) => sum + num, 0);
-};
+const operate = function(a, b, operator) {
+    const num1 = parseFloat(a);
+    const num2 = parseFloat(b);
+    let result;
 
-const subtract = function(numbers) {
-    return numbers.reduce((total, num) => total - num);
-};
+    switch (operator) {
+        case "+":
+            result = num1 + num2;
+            break;
+        case "-":
+            result = num1 - num2;
+            break;
+        case "x":
+            result = num1 * num2;
+            break;
+        case "÷":
+            result = num2 === 0 ? "ERROR" : num1 / num2;
+            break;
+        default:
+            return b;
+    }
 
-const multiply = function(numbers) {
-    return numbers.reduce((product, num) => product * num, 1);
-};
-
-const divide = function(numbers) {
-    return numbers.reduce((quotient, num) => {
-    if (num === 0) return "ERROR";
-    return quotient;
-    });
+    return parseFloat(result.toFixed(1));
 };
 
 document.querySelectorAll(".buttons button").forEach(button => 
@@ -44,22 +48,51 @@ document.querySelectorAll(".buttons button").forEach(button =>
     const value = button.textContent;
 
     if (!isNaN(value)) {
-        numbers.push(Number(value));
-        display();
+        if (currentNumber.length < 5) {
+            if (value === "0" && currentNumber === "") {
+                return;
+            }
+            currentNumber += value;
+            display(currentNumber);
+        }
+    } else if (value === ".") {
+        if (!hasDecimal) {
+            currentNumber += currentNumber === "" ? "0." : ".";
+            hasDecimal = true;
+            display(currentNumber);
+        }
     } else if (value === "c") {
-        numbers = [];
+        previousResult = null;
+        currentNumber = "";
         operator = "";
+        hasDecimal = false;
         display();
     } else if (value === "=") {
-        const result = operate();
-        numbers = [result];
-        display();
+        if (previousResult !== null && operator && currentNumber) {
+            previousResult = calculate(previousResult, currentNumber, operator);
+            display(previousResult);
+            currentNumber = "";
+            operator = "";
+            hasDecimal = previousResult.toString().includes(".");
+        }
     } else if (value === "del") {
-        numbers.pop();
-        display();
+        if (currentNumber) {
+            if (currentNumber.slice(-1) === ".") hasDecimal = false;
+            currentNumber = currentNumber.slice(0, -1);
+            display(currentNumber || "0");
+        }
     }   else {
-        operator = value;
-        display();
+        if (currentNumber) {
+            if (previousResult === null) {
+                previousResult = currentNumber;
+            } else if (operator){
+                previousResult = calculate(previousResult, currentNumber, operator);
+                display(previousResult);
+            }
+            operator = value;
+            currentNumber = "";
+            hasDecimal = false;
+        }
     }
     });
 });
