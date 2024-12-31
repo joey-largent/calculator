@@ -1,8 +1,3 @@
-/* TO-DO list:
-- re-order operators for clarity
-- align operators with numbers
-*/
-
 body {
     font-family: 'Silkscreen', Roboto, sans-serif;
     background-color: #ff7f50;
@@ -39,7 +34,7 @@ h1 {
     color: #0bf943;
     text-align: right;
     margin: 0;
-    animation: blink 2.5s steps(1, end) infinite;
+    animation: blink 1.5s steps(1, end) infinite;
 }
 
 .calculator {
@@ -97,7 +92,6 @@ button:active {
 
 #equalBtn {
     background-color:#ff00e6;
-    width: 57%;
 }
 
 #AC {
